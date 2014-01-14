@@ -17,6 +17,7 @@ $numLigneCommande = 20;
 
 // Recuperer toutes les valeurs du formulaire
 if(isset($_POST["action"])){
+    $init = 1;
     for($numCommande = 0; $numCommande < $numLigneCommande; $numCommande++){
         $commande[$numCommande]['nom']      = $_POST['commande'][$numCommande]['nom'];
         $commande[$numCommande]['avec']     = $_POST['commande'][$numCommande]['avec'];
@@ -36,6 +37,8 @@ if(isset($_POST["action"])){
             $commande[$numCommande]['message']     = "Trop percu";
         }
     }
+} else {
+    $init = 0;
 }
 
 // Calcul du montant de la commande
@@ -217,7 +220,8 @@ foreach($montantPersonne as $key => $value) {
                     echo "A redistribuer";
                 } else if ($arendre > 0) {
                     echo "Manquant";
-                } else {
+                }   
+                if ($init == 1) {
                     echo "Compte bon";
                 }
                ?>
