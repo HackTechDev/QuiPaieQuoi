@@ -9,7 +9,7 @@
     </head>
 <body>
 <h1>Qui Paie Quoi ?</h1>
-Version : 2.0.0<br/>
+Version : 0.1.0<br/>
 <br/>
 <?php
 
@@ -81,8 +81,9 @@ for($numCommande = 0; $numCommande < $numLigneCommande; $numCommande++){
     $montantPersonne[$_POST['commande'][$numCommande]['nom']] += $_POST['commande'][$numCommande]['paiement'];
 }
 ?>
+<a href="#commande">Voir la commande</a>
 <hr>
-Montant a payer pour chaque personne :<br/>
+Montant &agrave; payer pour chaque personne :<br/>
 <br/>
 <?php
 foreach($montantPersonne as $key => $value) {
@@ -92,7 +93,7 @@ foreach($montantPersonne as $key => $value) {
 }
 ?>
 <br/>
-<form name="form" action="index.php" method="post">
+<form name="form" action="index.php" method="post" id="form">
     <table border="1">
         <tr>
             <td>
@@ -251,6 +252,7 @@ foreach($montantPersonne as $key => $value) {
 <input type="submit" value="Calculer" name="action">
 </form>
 <hr/>
+<div id="commande">
 A commander: <br/><br/>
 <textarea name="acommander" id="acommander" rows="10" cols="20" style="font-size: 200%;" readonly>
 A payer : <?php echo $paiement . " E\n"; ?>
@@ -259,6 +261,8 @@ Services :
 echo $commandeFinale;
 ?>
 </textarea>
-
+</div>
+<br/>
+<a href="#form">Aller vers le formulaire de calcul</a>
 </body>
 </html>
