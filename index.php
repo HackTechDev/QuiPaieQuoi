@@ -81,7 +81,7 @@ for($numCommande = 0; $numCommande < $numLigneCommande; $numCommande++){
     $montantPersonne[$_POST['commande'][$numCommande]['nom']] += $_POST['commande'][$numCommande]['paiement'];
 }
 ?>
-<a href="#commande">Voir la commande</a>
+<a href="#commande" id="formcalcul">Voir la commande</a>
 <hr>
 Montant &agrave; payer pour chaque personne :<br/>
 <br/>
@@ -93,7 +93,7 @@ foreach($montantPersonne as $key => $value) {
 }
 ?>
 <br/>
-<form name="form" action="index.php" method="post" id="form">
+<form name="form" action="index.php" method="post">
     <table border="1">
         <tr>
             <td>
@@ -263,6 +263,6 @@ echo $commandeFinale;
 </textarea>
 </div>
 <br/>
-<a href="#form">Aller vers le formulaire de calcul</a>
+<a href="#formcalcul">Aller vers le formulaire de calcul</a>
 </body>
 </html>
