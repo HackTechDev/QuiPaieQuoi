@@ -221,8 +221,8 @@ foreach($montantPersonne as $key => $value) {
                 } else if ($arendre > 0) {
                     echo "Manquant";
                 }   
-                if ($init == 1) {
-                    echo "Compte bon";
+                if ($arendre == 0 && $init == 1) {
+                    echo "Compte est bon";
                 }
                ?>
                 </div>
