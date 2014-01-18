@@ -13,7 +13,10 @@ Version : 0.1.0<br/>
 <br/>
 <?php
 
+error_reporting(0);
+
 $numLigneCommande = 20;
+$tarif = 0;
 
 // Recuperer toutes les valeurs du formulaire
 if(isset($_POST["action"])){
@@ -74,26 +77,52 @@ foreach($produit as $key => $value) {
     }
 }
 
-// Genere la montant a donner pour chaque personne
-
-$montantPersonne = array();
+// Calcule du tarif pour chaque personne
+// Calcule le paiement a rendre pour chaque personne
+$tarifPersonne = array();
 for($numCommande = 0; $numCommande < $numLigneCommande; $numCommande++){
-    $montantPersonne[$_POST['commande'][$numCommande]['nom']] += $_POST['commande'][$numCommande]['paiement'];
+    $tarifPersonne[$_POST['commande'][$numCommande]['nom']] += $commande[$numCommande]['tarif'];
 }
+
+// Calcule le paiement pour chaque personne
+$paiementPersonne = array();
+for($numCommande = 0; $numCommande < $numLigneCommande; $numCommande++){
+    $paiementPersonne[$_POST['commande'][$numCommande]['nom']] += $_POST['commande'][$numCommande]['paiement'];
+}
+
+// Calcule le paiement a rendre pour chaque personne
+$arendrePersonne = array();
+for($numCommande = 0; $numCommande < $numLigneCommande; $numCommande++){
+    $arendrePersonne[$_POST['commande'][$numCommande]['nom']] += $commande[$numCommande]['arendre'];
+}
+
+
 ?>
 <a href="#commande" id="formcalcul">Voir la commande</a>
 <hr>
 Montant &agrave; payer pour chaque personne :<br/>
 <br/>
 <?php
-foreach($montantPersonne as $key => $value) {
+foreach($paiementPersonne as $key => $value) {
     if ($value != 0) {
-        echo $key . " = " . $value . "<br/>";
-    }
+        if ($arendrePersonne[$key] == 0) {
+            echo $key . " = " . $value . "<br/>";
+        } else {
+           if ($arendrePersonne[$key] > 0) {
+                echo $key . " = " . $tarifPersonne[$key] . " pour " . $value . " : A redonner = <font color=\"red\">" . $arendrePersonne[$key] . "</font> <br/>";
+           } else {
+                echo $key . " = " . $tarifPersonne[$key] . " pour " . $value . " : Manque = <font color=\"red\">" . abs($arendrePersonne[$key]) . "</font> <br/>";
+           }
+        }
+    } 
 }
+
 ?>
+<hr>
 <br/>
 <form name="form" action="index.php" method="post">
+    <input type="submit" value="Calculer" name="action"><br/>
+    <br/>
     <table border="1">
         <tr>
             <td>
@@ -183,8 +212,8 @@ foreach($montantPersonne as $key => $value) {
         </tr>
 <?php } ?>
         <tr>
-            <td colspan="3">
-                  &nbsp;
+            <td colspan="3" style="text-align: right">
+                  Totaux
             </td>
             <td style="text-align: right;">
                 <?php
@@ -242,10 +271,6 @@ foreach($montantPersonne as $key => $value) {
                 &nbsp;
             </td>
         </tr>
-
-
-
-
 
     </table>
 <br/>
