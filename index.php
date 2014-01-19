@@ -88,7 +88,7 @@ for($numCommande = 0; $numCommande < $numLigneCommande; $numCommande++){
 $commandeFinale = "";
 foreach($produit as $key => $value) {
     if($key != "") {
-        $commandeFinale .= $key . " = " . $value . " pour " .  $montantService[$key] . " E \n";
+        $commandeFinale .= $key . " = " . $value . " pour " .  $montantService[$key] . " &#8364; \n";
     }
 }
 
@@ -123,12 +123,12 @@ Montant &agrave; payer pour chaque personne :<br/>
 foreach($paiementPersonne as $key => $value) {
     if ($value != 0) {
         if ($arendrePersonne[$key] == 0) {
-            echo $key . " = " . $value . " E <br/>";
+            echo $key . " = " . $value . " &#8364; <br/>";
         } else {
            if ($arendrePersonne[$key] > 0) {
-                echo $key . " = " . $tarifPersonne[$key] . " E pour " . $value . " E : A redonner = <font color=\"red\">" . $arendrePersonne[$key] . " E </font> <br/>";
+                echo $key . " = " . $tarifPersonne[$key] . " &#8364; pour " . $value . " &#8364; : A redonner = <font color=\"red\">" . $arendrePersonne[$key] . " &#8364; </font> <br/>";
            } else {
-                echo $key . " = " . $tarifPersonne[$key] . " E pour " . $value . " E : Manque = <font color=\"red\">" . abs($arendrePersonne[$key]) . " E </font> <br/>";
+                echo $key . " = " . $tarifPersonne[$key] . " &#8364; pour " . $value . " &#8364; : Manque = <font color=\"red\">" . abs($arendrePersonne[$key]) . " &#8364; </font> <br/>";
            }
         }
     } 
@@ -143,10 +143,11 @@ foreach($paiementPersonne as $key => $value) {
 <form name="form" action="index.php" method="post">
     <input type="submit" value="Calculer" name="action"><br/>
     <br/>
+    (Valeur en &#8364;)
     <table border="1">
         <tr>
-            <td>
-                Id
+            <td style="text-align: center">
+               # 
             </td>
             <td style="text-align: center">
                
@@ -328,7 +329,7 @@ foreach($paiementPersonne as $key => $value) {
 <div id="commande">
 A commander: <br/><br/>
 <textarea name="acommander" id="acommander" rows="10" cols="20" style="font-size: 200%;" readonly>
-A payer : <?php echo $paiement . " E\n"; ?>
+A payer : <?php echo $paiement . " &#8364; \n"; ?>
 Services :
 <?php
 echo $commandeFinale;
