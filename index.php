@@ -318,9 +318,13 @@ foreach($paiementPersonne as $key => $value) {
 
     </table>
 <br/>
-<input type="submit" value="Calculer" name="action">
+<input type="submit" value="Calculer" name="action"><br/>
+<br/>
+<a href="#formcalcul">Aller vers le formulaire de calcul</a>
 </form>
+
 <hr/>
+
 <div id="commande">
 A commander: <br/><br/>
 <textarea name="acommander" id="acommander" rows="10" cols="20" style="font-size: 200%;" readonly>
@@ -332,6 +336,8 @@ echo $commandeFinale;
 </textarea>
 </div>
 <br/>
+
 <a href="#formcalcul">Aller vers le formulaire de calcul</a>
+
 </body>
 </html>
