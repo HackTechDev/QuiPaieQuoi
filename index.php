@@ -339,6 +339,8 @@ echo $commandeFinale;
 <br/>
 
 <a href="#formcalcul">Aller vers le formulaire de calcul</a>
-
+<hr>
+Par le Sanglier des Ardennes<br/>
+Code source disponible ici : <a href="https://github.com/Nekrofage/QuiPaieQuoi">QuiPaieQuoi</a>
 </body>
 </html>
