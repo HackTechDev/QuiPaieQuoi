@@ -43,7 +43,7 @@ if(isset($_POST["action"])){
     $init = 0;
 }
 
-// TODO: Verification du montant des services
+// Verification du montant des services
 $erreurService = array();
 for($numCommandeTester = 0; $numCommandeTester < $numLigneCommande; $numCommandeTester++){
     for($numCommande = 0; $numCommande < $numLigneCommande; $numCommande++){
