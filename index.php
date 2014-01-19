@@ -32,7 +32,6 @@ if(isset($_POST["action"])){
 
         $commande[$numCommande]['arendre']  = $commande[$numCommande]['paiement'] - $commande[$numCommande]['tarif'];
 
-
         if ( $commande[$numCommande]['tarif'] > $commande[$numCommande]['paiement'] ) {
             $commande[$numCommande]['message']     = "Pas assez percu";
         }
@@ -44,12 +43,23 @@ if(isset($_POST["action"])){
     $init = 0;
 }
 
+// TODO: Verification du montant des services
+$erreurService = array();
+for($numCommandeTester = 0; $numCommandeTester < $numLigneCommande; $numCommandeTester++){
+    for($numCommande = 0; $numCommande < $numLigneCommande; $numCommande++){
+        if ($commande[$numCommandeTester]['service'] == $commande[$numCommande]['service'] && 
+            $commande[$numCommandeTester]['tarif'] != $commande[$numCommande]['tarif'] ) {
+            $erreurService[$numCommandeTester] = 1; // Erreur de tarif du service
+        }
+    }
+}
+
 // Calcul du montant de la commande
 for($numCommande = 0; $numCommande < $numLigneCommande; $numCommande++){
    $tarif += $_POST['commande'][$numCommande]['tarif'];
 }
 
-// Calcul du paiment a donner
+// Calcul du paiement a donner
 for($numCommande = 0; $numCommande < $numLigneCommande; $numCommande++){
    $paiement += $_POST['commande'][$numCommande]['paiement'];
 }
@@ -63,17 +73,22 @@ if ($tarif > $paiement) {
 }
 
 // Calcul des quantites de service
-
 $produit = array();
 for($numCommande = 0; $numCommande < $numLigneCommande; $numCommande++){
    $produit[$_POST['commande'][$numCommande]['service']]++;
+}
+
+// Calcul du montant de chaque service
+$montantService = array();
+for($numCommande = 0; $numCommande < $numLigneCommande; $numCommande++){
+   $montantService[$_POST['commande'][$numCommande]['service']] += $commande[$numCommande]['tarif'];;
 }
 
 // Genere la commande finale
 $commandeFinale = "";
 foreach($produit as $key => $value) {
     if($key != "") {
-        $commandeFinale .= $key . " = " . $value . "\n";
+        $commandeFinale .= $key . " = " . $value . " pour " .  $montantService[$key] . " E \n";
     }
 }
 
@@ -96,7 +111,6 @@ for($numCommande = 0; $numCommande < $numLigneCommande; $numCommande++){
     $arendrePersonne[$_POST['commande'][$numCommande]['nom']] += $commande[$numCommande]['arendre'];
 }
 
-
 ?>
 <a href="#commande" id="formcalcul">Voir la commande</a>
 <hr>
@@ -106,12 +120,12 @@ Montant &agrave; payer pour chaque personne :<br/>
 foreach($paiementPersonne as $key => $value) {
     if ($value != 0) {
         if ($arendrePersonne[$key] == 0) {
-            echo $key . " = " . $value . "<br/>";
+            echo $key . " = " . $value . " E <br/>";
         } else {
            if ($arendrePersonne[$key] > 0) {
-                echo $key . " = " . $tarifPersonne[$key] . " pour " . $value . " : A redonner = <font color=\"red\">" . $arendrePersonne[$key] . "</font> <br/>";
+                echo $key . " = " . $tarifPersonne[$key] . " E pour " . $value . " E : A redonner = <font color=\"red\">" . $arendrePersonne[$key] . " E </font> <br/>";
            } else {
-                echo $key . " = " . $tarifPersonne[$key] . " pour " . $value . " : Manque = <font color=\"red\">" . abs($arendrePersonne[$key]) . "</font> <br/>";
+                echo $key . " = " . $tarifPersonne[$key] . " E pour " . $value . " E : Manque = <font color=\"red\">" . abs($arendrePersonne[$key]) . " E </font> <br/>";
            }
         }
     } 
@@ -156,14 +170,14 @@ foreach($paiementPersonne as $key => $value) {
             <td style="text-align: center">
                 Message
             </td>
-            <td style="text-align: center">
+            <td style="display: none;text-align: center">
                Action 
             </td>
         </tr>
 <?php for($numCommande = 0; $numCommande < $numLigneCommande; $numCommande++) { ?>
         <tr>
             <td style="text-align: center">
-                <?php echo $numCommande; ?>
+                <?php echo ($numCommande + 1); ?>
             </td>
             <td>
                 <input type="text" size="10" id="commande_<?php echo $numCommande; ?>_nom" name="commande[<?php echo $numCommande; ?>][nom]" value="<?php echo $commande[$numCommande]['nom']; ?>">
@@ -171,12 +185,27 @@ foreach($paiementPersonne as $key => $value) {
             <td style="display:none;">
                 <input type="text" size="10" id="commande_<?php echo $numCommande; ?>_avec" name="commande[<?php echo $numCommande; ?>][avec]" value="<?php echo $commande[$numCommande]['avec']; ?>">
             </td>
-            <td>
+
+        <?php 
+        if ($erreurService[$numCommande] == 1) {
+            echo "<td style=\"background-color: orange\">";  
+        } else {
+            echo "<td>";
+        }
+        ?>
                 <input type="text" size="10" id="commande_<?php echo $numCommande; ?>_service" name="commande[<?php echo $numCommande; ?>][service]" value="<?php echo $commande[$numCommande]['service']; ?>">
             </td>
-            <td>
+
+        <?php 
+        if ($erreurService[$numCommande] == 1) {
+            echo "<td style=\"background-color: orange\">";  
+        } else {
+            echo "<td>";
+        }
+        ?>
                 <input style="text-align: right;" type="text" size="10" id="commande_<?php echo $numCommande; ?>_tarif" name="commande[<?php echo $numCommande; ?>][tarif]" value="<?php echo $commande[$numCommande]['tarif']; ?>">
             </td>
+
             <td>
                <input style="text-align: right;" type="text" size="10" id="commande_<?php echo $numCommande; ?>_paiement" name="commande[<?php echo $numCommande; ?>][paiement]" value="<?php echo $commande[$numCommande]['paiement']; ?>">
             </td>
@@ -206,7 +235,7 @@ foreach($paiementPersonne as $key => $value) {
                  <?php echo $commande[$numCommande]['message']; ?>
                 </div>
             </td>
-            <td style="text-align: center">
+            <td style="display: none;text-align: center">
                 &nbsp;   
             </td>
         </tr>
@@ -243,33 +272,42 @@ foreach($paiementPersonne as $key => $value) {
                 ?>
                  </div>
             </td>
-            <td colspan="2" style="text-align: center">
+            <td style="text-align: center">
                 <div style="color: red">
                <?php
+                /*
                 if($arendre < 0) {
                     echo "A redistribuer";
                 } else if ($arendre > 0) {
                     echo "Manquant";
-                }   
+                }
+                   
                 if ($arendre == 0 && $init == 1) {
                     echo "Compte est bon";
                 }
+                */
                ?>
                 </div>
+            </td>
+            <td style="display: none">
             </td>
         </tr>
         <tr>
             <td colspan="4">
                   &nbsp;
             </td>
-            <td> 
+            <td colspan="2"> 
                <div style="color: red">
                 <?php echo $message; ?>
                 </div>
             </td>
-            <td colspan="3">
+            <td>
                 &nbsp;
             </td>
+            <td style="display: none">
+                &nbsp;
+            </td>
+
         </tr>
 
     </table>
