@@ -114,6 +114,9 @@ for($numCommande = 0; $numCommande < $numLigneCommande; $numCommande++){
 ?>
 <a href="#commande" id="formcalcul">Voir la commande</a>
 <hr>
+<?php
+if($init == 1) {
+?>
 Montant &agrave; payer pour chaque personne :<br/>
 <br/>
 <?php
@@ -133,7 +136,10 @@ foreach($paiementPersonne as $key => $value) {
 
 ?>
 <hr>
-<br/>
+<?php
+ }
+?>
+
 <form name="form" action="index.php" method="post">
     <input type="submit" value="Calculer" name="action"><br/>
     <br/>
